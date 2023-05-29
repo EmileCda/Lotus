@@ -12,7 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -24,7 +25,7 @@ import fr.lotus.model.implement.ClassDao;
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name="item_type")
 @Table(name="pickup_item")
-public abstract class PickUpItem  extends ClassDao implements IConstant, Serializable {
+public abstract class PickupItem  extends ClassDao implements IConstant, Serializable {
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -35,7 +36,8 @@ public abstract class PickUpItem  extends ClassDao implements IConstant, Seriali
 	private int quantity;
 	
 	
-	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "pickup_item", fetch = FetchType.LAZY)
+	@ManyToOne
+	@JoinColumn(name = "item_id", nullable = false)
 	private Item item;
 
 	
@@ -43,19 +45,30 @@ public abstract class PickUpItem  extends ClassDao implements IConstant, Seriali
 	
 	
 	
-	public PickUpItem() {
+	public PickupItem() {
 		this(DEFAULT_ID,
 				DEFAULT_QUANTITY,null
 				);
 		
 	}
 
-	public PickUpItem(int id, int quantity,  Item item) {
+	public PickupItem(int id, int quantity,  Item item) {
 		this.setId ( id);
 		this.setQuantity ( quantity);
 		this.setItem ( item);
 	}
 
+	
+
+	@Override
+	public  void preWrite() {} ;
+
+	@Override
+	public void postRead(){} ;
+	
+	
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -82,16 +95,12 @@ public abstract class PickUpItem  extends ClassDao implements IConstant, Seriali
 
 	@Override
 	public String toString() {
-		return String.format("CartItem [getId()=%s, getQuantity()=%s,  getItem()=%s]", getId(),
-				getQuantity(), getItem());
+		return String.format("Id[%d] %d x %s ", 
+				getId(),
+				getQuantity(), 
+				getItem().getName());
 	}
 
-	@Override
-	public abstract void preWrite() ;
-
-	@Override
-	public abstract void postRead();
-	
 	
 	
 

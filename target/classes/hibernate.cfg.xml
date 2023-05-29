@@ -31,6 +31,8 @@
 		<mapping class="fr.lotus.entity.Item"></mapping>
 		<mapping class="fr.lotus.entity.Order"></mapping>
 		<mapping class="fr.lotus.entity.Comment"></mapping>
+		<mapping class="fr.lotus.entity.CartItem"></mapping>
+		<mapping class="fr.lotus.entity.OrderLine"></mapping>
 
 	</session-factory>
 </hibernate-configuration>

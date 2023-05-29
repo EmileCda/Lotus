@@ -115,6 +115,22 @@ public class Order extends ClassDao implements IConstant, Serializable {
 		
 		
 	}
+	
+	public void addOrderLine(OrderLine orderLine) {
+		initOrderLineList();
+		this.getOrderLineList().add(orderLine);
+		
+	}
+
+	
+	public void initOrderLineList() {
+		if (this.getOrderLineList()== null) {
+			this.setOrderLineList(new ArrayList<OrderLine>())  ;
+		}
+		
+	}
+	
+	
 	public int getId() {
 		return id;
 	}

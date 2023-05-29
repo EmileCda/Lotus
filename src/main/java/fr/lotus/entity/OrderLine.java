@@ -19,7 +19,7 @@ import fr.lotus.common.IConstant;
 @DiscriminatorValue("order_line")
 @Table(name="order_line")
 //https://en.wikibooks.org/wiki/Java_Persistence/Inheritance#Example_single_table_inheritance_table_in_database
-public class OrderLine extends PickUpItem implements IConstant, Serializable {
+public class OrderLine extends PickupItem implements IConstant, Serializable {
 	
 	
 	private static final long serialVersionUID = -23153027186502371L;
@@ -45,6 +45,7 @@ public class OrderLine extends PickUpItem implements IConstant, Serializable {
 	
 	
 	
+	
 	public Order getOrder() {
 		return order;
 	}
@@ -53,17 +54,15 @@ public class OrderLine extends PickUpItem implements IConstant, Serializable {
 	}
 	@Override
 	public String toString() {
-		return String.format("OrderLine [getOrder()=%s]", getOrder());
-	}
-	@Override
-	public void preWrite() {
-		// TODO Auto-generated method stub
+		float unitPrice = getItem().getPrice();
+		float totalPrice =unitPrice * getQuantity();
+		float totalDiscount =totalPrice * getItem().getDiscount()/100;
+		float toPay=totalPrice -totalDiscount;
 		
-	}
-	@Override
-	public void postRead() {
-		// TODO Auto-generated method stub
-		
+		return String.format("%s : %d x %s   %.2f€  réduction :-%.2f€  to pay %.2f€", 
+				getOrder().getOrderNumber(), 
+				getQuantity(),getItem().getName(), 
+				totalPrice,totalDiscount,toPay);
 	}
 	
 	

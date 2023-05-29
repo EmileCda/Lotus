@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import fr.lotus.common.IConstant;
@@ -13,13 +15,14 @@ import fr.lotus.common.IConstant;
 @DiscriminatorValue("cart_item")
 @Table(name="cart_item")
 //https://en.wikibooks.org/wiki/Java_Persistence/Inheritance#Example_single_table_inheritance_table_in_database
-public class CartItem  extends PickUpItem implements IConstant, Serializable {
+public class CartItem  extends PickupItem implements IConstant, Serializable {
+	
 	
 	
 	private static final long serialVersionUID = 1L;
-	private User user; 
-	
-	
+	@ManyToOne
+	@JoinColumn(name = "costumer_id", nullable = false)
+	private Costumer costumer;
 	
 	
 	public CartItem() {
@@ -28,45 +31,32 @@ public class CartItem  extends PickUpItem implements IConstant, Serializable {
 				);
 		
 	}
-	public CartItem(int quantity, User user, Item item) {
-		this(DEFAULT_ID,quantity,user,item);
+	public CartItem(int quantity,Costumer costumer, Item item) {
+		this(DEFAULT_ID,quantity,costumer,item);
 	}
 
-	public CartItem(int id, int quantity, User user, Item item) {
+	public CartItem(int id, int quantity, Costumer costumer, Item item) {
 		
 		this.setId ( id);
 		this.setQuantity ( quantity);
-		this.setUser ( user);
+		this.setCostumer ( costumer);
 		this.setItem ( item);
 	}
 
 
-	public User getUser() {
-		return user;
+
+	public Costumer getCostumer() {
+		return costumer;
 	}
-
-	public void setUser(User user) {
-		this.user = user;
+	public void setCostumer(Costumer costumer) {
+		this.costumer = costumer;
 	}
-
-	
-
 	@Override
 	public String toString() {
-		return String.format("CartItem [getId()=%s, getQuantity()=%s, getUser()=%s, getItem()=%s]", getId(),
-				getQuantity(), getUser(), getItem());
-	}
-	@Override
-	public void preWrite() {
-		// TODO Auto-generated method stub
 		
+		return String.format("%s => %s",super.toString(), getCostumer().getEmail());
 	}
-	@Override
-	public void postRead() {
-		// TODO Auto-generated method stub
-		
-	}
-	
+
 	
 	
 

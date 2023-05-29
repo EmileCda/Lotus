@@ -48,8 +48,13 @@ public class Item extends ClassDao implements IConstant, Serializable {
 //	@Transient
 	private List<Comment> commentList;
 
-	@Transient
-	private CartItem cartItem;
+	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
+//	@Transient
+	private List<CartItem > cartItemList;
+
+	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "item", fetch = FetchType.LAZY)
+//	@Transient
+	private List<OrderLine> orderLineList;
 
 	public Item() {
 
@@ -76,6 +81,7 @@ public class Item extends ClassDao implements IConstant, Serializable {
 		this.setVideo(video);
 		this.setCategory(category);
 		initCommentList();
+		initCartItemList();
 
 	}
 	public void addComment(Comment comment) {
@@ -84,10 +90,36 @@ public class Item extends ClassDao implements IConstant, Serializable {
 		
 	}
 
+	public void addCartItem(CartItem cartItem) {
+		initCartItemList();
+		this.getCartItemList().add(cartItem);
+		
+	}
+	public void addOrderLine(OrderLine orderLine) {
+		initOrderLineList();
+		this.getOrderLineList().add(orderLine);
+		
+	}
+
+	
+	public void initOrderLineList() {
+		if (this.getOrderLineList()== null) {
+			this.setOrderLineList(new ArrayList<OrderLine>())  ;
+		}
+		
+	}
 	
 	public void initCommentList() {
 		if (this.getCommentList()== null) {
 			this.setCommentList(new ArrayList<Comment>())  ;
+		}
+		
+	}
+	
+	
+	public void initCartItemList() {
+		if (this.getCartItemList()== null) {
+			this.setCartItemList(new ArrayList<CartItem>())  ;
 		}
 		
 	}
@@ -179,13 +211,6 @@ public class Item extends ClassDao implements IConstant, Serializable {
 		this.commentList = commentList;
 	}
 
-	public CartItem getCartItem() {
-		return cartItem;
-	}
-
-	public void setCartItem(CartItem cartItem) {
-		this.cartItem = cartItem;
-	}
 	@Override
 	public void preWrite() {
 		// TODO Auto-generated method stub
@@ -198,6 +223,18 @@ public class Item extends ClassDao implements IConstant, Serializable {
 
 	}
 
+	public void setCommentList(List<Comment> commentList) {
+		this.commentList = commentList;
+	}
+
+	public List<CartItem> getCartItemList() {
+		return cartItemList;
+	}
+
+	public void setCartItemList(List<CartItem> cartItemList) {
+		this.cartItemList = cartItemList;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("Id[%d] %s : %s %.2f€, -%d %%, stock:%d, %svendable, img:%s, vid :%s",
@@ -206,6 +243,15 @@ public class Item extends ClassDao implements IConstant, Serializable {
 				getPicture(), getVideo());
 
 	}
+
+	public List<OrderLine> getOrderLineList() {
+		return orderLineList;
+	}
+
+	public void setOrderLineList(List<OrderLine> orderLineList) {
+		this.orderLineList = orderLineList;
+	}
+
 
 
 }
