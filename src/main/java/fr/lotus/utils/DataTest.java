@@ -14,8 +14,10 @@ import fr.lotus.common.IConstant;
 import fr.lotus.entity.Address;
 import fr.lotus.entity.BankCard;
 import fr.lotus.entity.Category;
+import fr.lotus.entity.Comment;
 import fr.lotus.entity.Costumer;
 import fr.lotus.entity.Item;
+import fr.lotus.entity.Order;
 import fr.lotus.entity.Param;
 //import fr.jasmin.entity.Address;
 //import fr.jasmin.entity.BankCard;
@@ -57,6 +59,21 @@ public final class DataTest implements IConstant {
 	}
 
 	// ---------------------------------------------------------------------------------------------------
+	public static Order genOrder() {
+
+//		public Order( String orderNumber,Date deliveryDate, float totalDiscount,
+//				float shippingCosts, float grandTotal) {
+		
+		
+		return new Order(DataTest.orderNumber(),
+				Utils.addDate(DATE_NOW, Utils.randInt(7, 10)),
+				Utils.randFloat(0, 1000),
+				Utils.randFloat(1, 100),
+				Utils.randFloat(1000, 2000));
+
+	}
+
+	// ---------------------------------------------------------------------------------------------------
 	public static Item genItem() {
 
 		return new Item(DataTest.itemName(), DataTest.itemDescription(), Utils.randFloat(1, 100), Utils.randInt(1, 90),
@@ -64,19 +81,15 @@ public final class DataTest implements IConstant {
 	}
 
 //	// ---------------------------------------------------------------------------------------------------
-//	public static String genOrderNumber(int id) {
-//		
-//		
-//		return String.format("DT%s-ID%d-RN%06d-FR",Utils.date2String(DATE_NOW, "yyyyMMdd"),id,Utils.randInt(0, 999999) );
-//		
-//		
-//	}
-//
-//	// ---------------------------------------------------------------------------------------------------
-//	public static Comment genComment() {
-//		return new Comment (DataTest.sentence(), Utils.randInt(0, 5));
-//	}
-//
+	
+	
+	public static Comment genComment() {
+		return new Comment (DataTest.comment(), Utils.randInt(0, 5));
+	}
+//	public Comment( String text, int grade, Item item, Costumer costumer) {
+//	this(DEFAULT_ID,text, grade, item, costumer);
+
+
 //	// ---------------------------------------------------------------------------------------------------
 //	public static BankCard genBankCardNoName() {
 //
@@ -180,9 +193,18 @@ public final class DataTest implements IConstant {
 		return String.format("0.3%S", Utils.randInt(0, 999));
 
 	}
-
 	// ---------------------------------------------------------------------------------------------------
-
+	public static String orderNumber() {
+		
+//		JSMyyyymmdd-<1.. 1000>-FR-<1.99>
+		
+		return String.format("JSM-%s-%05d-FR-%02d", 
+				Utils.date2String(DATE_NOW, "yyyyMMdd"),
+				Utils.randInt(1, 99999),
+				Utils.randInt(1, 99));
+				
+	
+	}
 	// ---------------------------------------------------------------------------------------------------
 	public static String bankCardNumber() {
 
@@ -283,7 +305,7 @@ public final class DataTest implements IConstant {
 	}
 
 // ---------------------------------------------------------------------------------------------------
-	public static String domain() {
+			public static String domain() {
 		if (domainList == null) {
 			domainList = new ArrayList<String>();
 
@@ -463,38 +485,23 @@ public final class DataTest implements IConstant {
 		return itemList.get(position);
 	}
 
+	
 	// ---------------------------------------------------------------------------------------------------
-	public static List<String> InitList(List<String> listName, String Key) {
-		if (listName == null) {
-			listName = new ArrayList<String>();
-			ResourceBundle myResource = ResourceBundle.getBundle("testData"); // retreive data from Dbase.properties
-			String propertieValue = myResource.getString(Key);
-			String propertieArray[] = propertieValue.split(";");
-			for (String value : propertieArray) {
-
-				listName.add(value);
-			}
-		}
-		return listName;
+	public static String comment() {
+		if (DataTest.commentList == null) 
+			DataTest.commentList= initList("comment");
+		int position = Utils.randInt(0, commentList.size() - 1);
+		return DataTest.commentList.get(position);
 	}
 
+	
 	// ---------------------------------------------------------------------------------------------------
 	public static String city() {
-		if (cityList == null) {
-			cityList = new ArrayList<String>();
-
-			ResourceBundle myResource = ResourceBundle.getBundle("testData"); // retreive data from Dbase.properties
-			String propertieValue = myResource.getString("CityName");
-			String propertieArray[] = propertieValue.split(";");
-
-			for (String value : propertieArray) {
-
-				cityList.add(Utils.firstToUpper(value));
-			}
-		}
+		
+		if (DataTest.cityList == null) 
+			DataTest.cityList = initList("CityName");
 		int position = Utils.randInt(0, cityList.size() - 1);
-
-		return cityList.get(position);
+		return DataTest.cityList.get(position);
 	}
 
 //---------------------------------------------------------------------------------------------------
@@ -582,5 +589,23 @@ public final class DataTest implements IConstant {
 	}
 
 //---------------------------------------------------------------------------------------------------
+	public static List<String> initList(String key){
+		
+		List<String> returnList = new ArrayList<String>();
+
+		ResourceBundle myResource = ResourceBundle.getBundle("testData"); // retreive data from Dbase.properties
+		String propertieValue = myResource.getString(key);
+		String propertieArray[] = propertieValue.split(";");
+
+		for (String value : propertieArray) {
+
+			returnList.add(value) ;
+		}
+
+
+		return returnList ;
+	}
+			
+// ---------------------------------------------------------------------------------------------------
 
 }

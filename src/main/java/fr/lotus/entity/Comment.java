@@ -1,32 +1,51 @@
 package fr.lotus.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import fr.lotus.common.IConstant;
 import fr.lotus.model.implement.ClassDao;
 
+@Entity
+@Table(name = "comment")
 public class Comment  extends ClassDao implements IConstant {
 
 	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id; 
 	private String  text;
 	private int   grade ; // from 0 to 5 
+
+	@ManyToOne
+	@JoinColumn(name = "item_id", nullable = false)
 	private Item item;
-	private User user;
+
+	@ManyToOne
+	@JoinColumn(name = "costumer_id", nullable = false)
+	private Costumer costumer;
 	
 	
 	public Comment() {
 		this(DEFAULT_ID,DEFAULT_TEXT,DEFAULT_GRADE,null,null);
 	}
 	
-	public Comment( String text, int grade, Item item, User user) {
-		this(DEFAULT_ID,text, grade, item, user);
+	public Comment( String text, int grade) {
+		this(DEFAULT_ID,text, grade, null, null);
 	}
 	
-	public Comment(int id, String text, int grade, Item item, User user) {
+	public Comment(int id, String text, int grade, Item item, Costumer costumer) {
 		this.setId ( id);
 		this.setText ( text);
 		this.setGrade ( grade);
 		this.setItem ( item);
-		this.setUser ( user);
+		this.setCostumer ( costumer);
 	}
 
 
@@ -54,6 +73,14 @@ public class Comment  extends ClassDao implements IConstant {
 		return grade;
 	}
 
+	public String getStarGrade() {
+		String stringReturn="";
+		for (int index = 0; index < this.getGrade(); index++) {
+			stringReturn +="*";
+		}
+		return stringReturn;
+	}
+
 
 	public void setGrade(int grade) {
 		this.grade = grade;
@@ -70,14 +97,7 @@ public class Comment  extends ClassDao implements IConstant {
 	}
 
 
-	public User getUser() {
-		return user;
-	}
 
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 	@Override
 	public void preWrite() {
@@ -90,5 +110,22 @@ public class Comment  extends ClassDao implements IConstant {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
+	public Costumer getCostumer() {
+		return costumer;
+	}
+
+	public void setCostumer(Costumer costumer) {
+		this.costumer = costumer;
+	}
 	
+	@Override
+	public String toString() {
+		return String.format("Id[%d], %s %s, pour:%s:[%s], de :%s", 
+				getId(), getStarGrade(),getText(), 
+				getItem().getName(),getItem().getCategory().getName(), 
+				getCostumer().getEmail());
+	}
 }

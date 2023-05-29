@@ -47,11 +47,11 @@ public class Costumer extends User  implements IConstant,Serializable {
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
 	@Transient
 	private List<CartItem>  cartItemList; 				// meaning cart : item + quan
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
 	@Transient
 	private List<Order> orderList;
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-	@Transient
+	@OneToMany(cascade = CascadeType.DETACH, mappedBy = "costumer", fetch = FetchType.LAZY)
+//	@Transient
 	private List<Comment> commentList ;
 	
 	
@@ -95,31 +95,66 @@ public class Costumer extends User  implements IConstant,Serializable {
 		this.setBirthdate ( birthdate);
 		this.setPhoneNumber ( phoneNumber);
 		
+		initAddressList() ;
+		initOrderList();
+		initBankCardList();
+		initCommentList();
 		
-		
-		this.setAddressList(new ArrayList<Address>())  ;
-		this.setBankCardList (new ArrayList<BankCard>())  ;
-		this.setCartItemList (new ArrayList<CartItem>())  ;
-		this.setOrderList (new ArrayList<Order>())  ;
-		this.setCommentList(new ArrayList<Comment>())  ;
 	}
 
 	
 	public void addAddress(Address address) {
-		if (this.getAddressList()== null) {
-			this.setAddressList(new ArrayList<Address>())  ;
-		}
+		initAddressList() ;
 		this.getAddressList().add(address);
-		
 	}
-	
+
+
 	public void addBankCard(BankCard bankCard) {
-		if (this.getBankCardList()== null) {
-			this.setBankCardList(new ArrayList<BankCard>())  ;
-		}
+		initBankCardList();
 		this.getBankCardList().add(bankCard);
 		
 	}
+	
+	
+	public void addOrder(Order order) {
+		initOrderList();
+		this.getOrderList().add(order);
+		
+	}
+
+	public void addComment(Comment comment) {
+		initCommentList();
+		this.getCommentList().add(comment);
+		
+	}
+
+	public void initBankCardList() {
+		if (this.getBankCardList()== null) {
+			this.setBankCardList(new ArrayList<BankCard>())  ;
+		}
+		
+	}
+	public void initAddressList() {
+		if (this.getAddressList()== null) {
+			this.setAddressList(new ArrayList<Address>())  ;
+		}
+		
+	}
+	
+	public void initOrderList() {
+		if (this.getOrderList()== null) {
+			this.setOrderList(new ArrayList<Order>())  ;
+		}
+		
+	}
+	
+	public void initCommentList() {
+		if (this.getCommentList()== null) {
+			this.setCommentList(new ArrayList<Comment>())  ;
+		}
+		
+	}
+
 	
 	public void preWrite(){
 		super.preWrite();
