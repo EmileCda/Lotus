@@ -15,13 +15,18 @@ public class TBankCardCreate {
 		//--- retreive an existing costumer 
 		int userId = 2;
 		Costumer costumer = new Costumer() ;
-		ICrudDao costumerDao = new CrudDao();
+		ICrudDao costumerDao = new CrudDao(costumer);
 		try {
-			costumer = (Costumer) costumerDao.read(userId,costumer.getClass());
+			costumer = (Costumer) costumerDao.read(userId);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		Utils.trace(costumer.toString());
+		}finally {
+			costumerDao.close();
+		}		if (costumer != null)
+			Utils.trace(costumer.toString());
+		else
+			Utils.trace("costumer is null ") ;
+			
 		
 // creating a bankcard and assign it to the user 
 		
@@ -31,16 +36,21 @@ public class TBankCardCreate {
 		
 		bankCard.setCostumer(costumer);
 		
-		ICrudDao bankCardDao = new CrudDao();
+		ICrudDao bankCardDao = new CrudDao(bankCard);
 		BankCard bankCardAdded = new BankCard() ;
 		
 		try {
 			bankCardAdded = (BankCard) bankCardDao.create(bankCard);
 		} catch (Exception e) {
 			Utils.trace("catch create " + e.toString());
+		}finally {
+			bankCardDao.close();
 		}
 		
-		Utils.trace(bankCardAdded.toString());
+		if (bankCardAdded != null ) 
+			Utils.trace(bankCardAdded.toString());
+		else 
+			Utils.trace("bankCardAdded est null ");
 
 		Utils.trace("*************************** end ************************************");
 		

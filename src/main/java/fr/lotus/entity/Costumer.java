@@ -38,11 +38,9 @@ public class Costumer extends User  implements IConstant,Serializable {
 	private String phoneNumber;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
-//	@Transient
 	private List<Address> addressList;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "costumer", fetch = FetchType.LAZY)
-//	@Transient
 	private List<BankCard> bankCardList;
 
 	

@@ -2,15 +2,31 @@ package fr.lotus.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import fr.lotus.common.IConstant;
 
+
+@Entity
+@DiscriminatorValue("order_line")
+@Table(name="order_line")
+//https://en.wikibooks.org/wiki/Java_Persistence/Inheritance#Example_single_table_inheritance_table_in_database
 public class OrderLine extends PickUpItem implements IConstant, Serializable {
 	
 	
 	private static final long serialVersionUID = -23153027186502371L;
+	
+	@ManyToOne
+	@JoinColumn(name = "order_id", nullable = false)
 	private Order order;
-	
-	
 	
 	
 	public OrderLine() {

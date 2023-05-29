@@ -1,8 +1,16 @@
 package fr.lotus.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import fr.lotus.common.IConstant;
 import fr.lotus.model.implement.ClassDao;
@@ -10,6 +18,7 @@ import fr.lotus.model.implement.ClassDao;
 public class Order extends ClassDao implements IConstant, Serializable {
 	
 	
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String orderNumber;
 
@@ -20,14 +29,21 @@ public class Order extends ClassDao implements IConstant, Serializable {
 	private float shippingCosts;
 	private float grandTotal;
 
+	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "Address", fetch = FetchType.LAZY)
 	private Address deliveryAddress;
 	
+	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "Address", fetch = FetchType.LAZY)
 	private Address billingAddress;
+	
+	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "BankCard", fetch = FetchType.LAZY)
 	private BankCard bankCardUsed;
 	
-	private User user;
+	@ManyToOne
+	@JoinColumn(name = "costumer_id", nullable = false)
+	private Costumer costumer;
 
-	private List<OrderLine> orderLine ;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "Order", fetch = FetchType.LAZY)
+	private List<OrderLine> orderLineList ;
 	
 	public Order() {
 		this(DEFAULT_ID, DEFAULT_ORDER_NUMBER, DEFAULT_DATE, DEFAULT_DATE, DEFAULT_FLOAT_VALUE, DEFAULT_FLOAT_VALUE,
@@ -40,7 +56,7 @@ public class Order extends ClassDao implements IConstant, Serializable {
 	public Order(int id, String orderNumber, Date createDate, Date deliveryDate, float totalDiscount,
 			float shippingCosts, float grandTotal, 
 			Address deliveryAddress, Address billingAddress,
-			BankCard bankCardUsed, User user) {
+			BankCard bankCardUsed, Costumer costumer) {
 		this.setId ( id);
 		this.setOrderNumber (orderNumber);
 		this.setCreateDate (createDate);
@@ -51,8 +67,11 @@ public class Order extends ClassDao implements IConstant, Serializable {
 		this.setDeliveryAddress (deliveryAddress);
 		this.setBillingAddress ( billingAddress);
 		this.setBankCardUsed ( bankCardUsed);
-		this.setUser (user);
-		this.setOrderLine (orderLine);
+		this.setCostumer (costumer);
+
+		if (this.getOrderLineList()== null)
+			this.setOrderLineList(new ArrayList<OrderLine>());
+
 	}
 
 	
@@ -145,20 +164,33 @@ public class Order extends ClassDao implements IConstant, Serializable {
 		this.bankCardUsed = bankCardUsed;
 	}
 
-	public User getUser() {
-		return user;
+
+
+
+
+	public Costumer getCostumer() {
+		return costumer;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+
+
+
+	public void setCostumer(Costumer costumer) {
+		this.costumer = costumer;
 	}
 
-	public List<OrderLine> getOrderLine() {
-		return orderLine;
+
+
+
+	public List<OrderLine> getOrderLineList() {
+		return orderLineList;
 	}
 
-	public void setOrderLine(List<OrderLine> orderLine) {
-		this.orderLine = orderLine;
+
+
+
+	public void setOrderLineList(List<OrderLine> orderLineList) {
+		this.orderLineList = orderLineList;
 	}
 	
 	

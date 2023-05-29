@@ -1,6 +1,7 @@
 package fr.lotus.test;
 
 import fr.lotus.entity.Param;
+import fr.lotus.entity.Param;
 import fr.lotus.entity.User;
 import fr.lotus.model.implement.CrudDao;
 import fr.lotus.model.interfaces.ICrudDao;
@@ -10,27 +11,36 @@ public class TParamUpdate {
 	public static void main(String[] args) {
 		
 		Utils.trace("*************************** Begin ************************************");
-		int maxRow = 1; 
-		Param param = new Param() ;
-		ICrudDao paramDao = new CrudDao() ;
+
+		int rowId = 2;
+		Param param =  new Param();
+		ICrudDao paramDao = new CrudDao(param) ;
 		try {
-			for (int rowId = 2; rowId <= maxRow; rowId ++) {
-				param = (Param) paramDao.read(rowId,param.getClass());
-				Utils.trace("Before"+param.toString());
+			param = (Param) paramDao.read(rowId );
+			if (param == null )
+				Utils.trace("Param null ");
+			else {
+				Utils.trace("Before" + param.toString());
 
-				//-------------------------- update ----------------------
-				param.setIntValue(rowId);
+				// -------------------------- update ----------------------
+				param.setIntValue(0);
 				paramDao.update(param);
-				param = (Param) paramDao.read(rowId,param.getClass());
-				Utils.trace("After"+param.toString());
-				paramDao.delete(param);
-
+	
+				param = (Param) paramDao.read(rowId);
+				if (param != null )
+					Utils.trace("After" + param.toString());
+				else
+					Utils.trace("Param null ");
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		} catch (
+
+				Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}finally {
+			paramDao.close();
 		}
-		
 		
 		
 		

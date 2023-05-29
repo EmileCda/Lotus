@@ -11,25 +11,34 @@ public class TAddressUpdate {
 
 		Utils.trace("*************************** Begin ************************************");
 
-		int rowId = 1;
+		int rowId = 5;
 		Address address = new Address();
-		ICrudDao addressDao = new CrudDao();
+		ICrudDao addressDao = new CrudDao(address);
 		try {
-			address = (Address) addressDao.read(rowId, address.getClass());
-			Utils.trace("Before" + address.toString());
+			address = (Address) addressDao.read(rowId );
+			if (address == null )
+				Utils.trace("Address null ");
+			else {
+				Utils.trace("Before" + address.toString());
 
-			// -------------------------- update ----------------------
-			address.setCity("Palo-alto");
-			addressDao.update(address);
-
-			address = (Address) addressDao.read(rowId, address.getClass());
-			Utils.trace("After" + address.toString());
+				// -------------------------- update ----------------------
+				address.setCity("Palo-alto");
+				addressDao.update(address);
+	
+				address = (Address) addressDao.read(rowId);
+				if (address != null )
+					Utils.trace("After" + address.toString());
+				else
+					Utils.trace("Address null ");
+			}
 
 		} catch (
 
 				Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+		}finally {
+			addressDao.close();
 		}
 
 		Utils.trace("*************************** end ************************************");

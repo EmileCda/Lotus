@@ -1,6 +1,7 @@
 package fr.lotus.test;
 
 import fr.lotus.entity.Address;
+import fr.lotus.entity.BankCard;
 import fr.lotus.entity.Costumer;
 import fr.lotus.model.implement.CrudDao;
 import fr.lotus.model.interfaces.ICrudDao;
@@ -9,42 +10,44 @@ import fr.lotus.utils.Utils;
 
 public class TCostumerCreate {
 	public static void main(String[] args) {
-		int maxIndex = 10 ;
+		int maxIndex = 3 ;
 		Utils.trace("*************************** Begin ************************************");
 		
 		Costumer costumer = DataTest.genCostumer() ;
-		
-		Utils.trace(costumer.toString());
-		
-		
-		Address address = new Address() ;
-		address = DataTest.genAddress();
-		Utils.trace(address.toString());
-		
-		address.setCostumer(costumer);
-		costumer.addAddress(address);
-		
-		
-		
-//		IObjectDao costumerDao = new CostumerDao();
-		ICrudDao costumerDao = new CrudDao();
 		Costumer costumerAdded = new Costumer() ;
+		ICrudDao costumerDao = new CrudDao(costumer);
 		
 		try {
 			for (int index = 0 ; index < maxIndex; index++) {
-				costumer = DataTest.genCostumer() ;
+
+				costumer = DataTest.genCostumer() ;		// generate random costumer
+
 				int maxAddress = Utils.randInt(1, 4);
+				Address address = new Address() ;
 				for (int nbAddress = 0 ; nbAddress < maxAddress; nbAddress++) {
 				
-					address = DataTest.genAddress();
-					address.setCostumer(costumer);
-					costumer.addAddress(address);
+					address = DataTest.genAddress(); 	// generate random address
+					address.setCostumer(costumer);		// assign costumer tu address
+					costumer.addAddress(address);		// add address to costumer addressList
 				}
 
-				costumerAdded = (Costumer) costumerDao.create(costumer);
+				int maxBankCard = Utils.randInt(1, 4);
+				BankCard bankCard= new BankCard() ;
+
+				for (int nbBankCard = 0 ; nbBankCard < maxBankCard; nbBankCard++) {
+				
+					bankCard = DataTest.genBankCard(costumer); // generate random bankcard
+					bankCard.setCostumer(costumer);				// assign costumer to bankcard
+					costumer.addBankCard(bankCard);				// add bankcard to costumer bankcardlist
+				}
+
+				
+				costumerAdded = (Costumer) costumerDao.create(costumer); // create costumer in database
 			}
 		} catch (Exception e) {
 			Utils.trace("catch create " + e.toString());
+		}finally {
+			costumerDao.close();
 		}
 		
 		Utils.trace(costumerAdded.toString());

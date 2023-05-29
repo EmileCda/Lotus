@@ -15,7 +15,7 @@ import fr.lotus.common.IConstant;
 import fr.lotus.model.implement.ClassDao;
 
 @Entity
-@Table(name = "param")
+@Table(name = "sys_param")
 public class Param extends ClassDao  implements IConstant, Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -4,7 +4,7 @@ import java.util.Date;
 
 public interface IUtils {
 
-	
+	public final String DATE_FORMAT= "dd/MM/yyyy";
 	// convert SQL date to java Date
 	public static Date toJavaDate(java.sql.Date sqlDate) {return null;} ;
 
@@ -17,8 +17,13 @@ public interface IUtils {
 	// convert a date into string  by using date format defined in IConstant (DATE_FORMAT= "dd/MM/yyyy";)
 	public static String date2String(Date date){return null;} ;
 
-	// display debug information with filename and line number
+	// 	random value	
+	public static int randInt(int minValue, int maxValue) { return 0; };
+	public static int randFloat(int minValue, int maxValue) { return 0; };
 
-	public static void trace(String msg) {};
-	
+
+	// display debug information with filename and line number
+	public static void trace(String patern, Object... arguments) {};
+	public  static void setVerboseMode(boolean verboseMode) {}; // set verbose trace or not 
+
 }

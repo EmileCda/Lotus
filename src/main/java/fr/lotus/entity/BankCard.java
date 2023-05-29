@@ -95,7 +95,6 @@ public class BankCard extends ClassDao implements IConstant, Serializable {
 		
 		
 		this.setExpiryDateSql( Utils.toSqlDate(this.getExpiryDate()));
-		Utils.trace(this.getExpiryDateSql().toString());
 	}
 
 	public void postRead(){

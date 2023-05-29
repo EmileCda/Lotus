@@ -2,8 +2,17 @@ package fr.lotus.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import fr.lotus.common.IConstant;
 
+
+@Entity
+@DiscriminatorValue("cart_item")
+@Table(name="cart_item")
+//https://en.wikibooks.org/wiki/Java_Persistence/Inheritance#Example_single_table_inheritance_table_in_database
 public class CartItem  extends PickUpItem implements IConstant, Serializable {
 	
 	

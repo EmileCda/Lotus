@@ -2,15 +2,40 @@ package fr.lotus.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import fr.lotus.common.IConstant;
 import fr.lotus.model.implement.ClassDao;
 
+
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name="item_type")
+@Table(name="pickup_item")
 public abstract class PickUpItem  extends ClassDao implements IConstant, Serializable {
 	
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private int quantity;
+	
+	
+	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "pickup_item", fetch = FetchType.LAZY)
 	private Item item;
 
 	

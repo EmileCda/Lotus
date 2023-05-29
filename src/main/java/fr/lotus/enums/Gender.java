@@ -4,7 +4,7 @@ package fr.lotus.enums;
 
 public enum Gender {
 
-	MALE("Homme","M.",1), FEMALE("Femme","Mme",2), OTHER("autre","",3),NULL("","",4) ;
+	MALE("Homme","M.",0),FEMALE("Femme","Mme",1), OTHER("autre","",2),NULL("","",3) ;
 	
 	private String value;
 	private String title;
