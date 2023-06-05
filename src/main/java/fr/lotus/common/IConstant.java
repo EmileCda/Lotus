@@ -52,6 +52,7 @@ public interface IConstant {
 	public final String DEFAULT_PHONE= "0011223344";
 
 // ----------------------Item -----------------------------
+	public final String DEFAULT_PIC= "http://default-picture.jpg";
 	
 //----------------- encryption-----------------------------------------------	
 	public final String ALGORITHM = "AES";

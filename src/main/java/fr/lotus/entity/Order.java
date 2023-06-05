@@ -1,33 +1,74 @@
 package fr.lotus.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import fr.lotus.common.IConstant;
 import fr.lotus.model.implement.ClassDao;
+import fr.lotus.utils.Utils;
 
+
+@Entity
+@Table(name = "costumer_order")
 public class Order extends ClassDao implements IConstant, Serializable {
 	
 	
+	private static final long serialVersionUID = 1L;
+	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
 	private int id;
+	
+	@Column (name="order_number")
 	private String orderNumber;
 
+	@Column (name="create_date")
 	private Date createDate;
+	@Column (name="delivery_date")
 	private Date deliveryDate;
 
+	@Column (name="total_discount")
 	private float totalDiscount; // in value (not in%)
+	@Column (name="shipping_costs")
 	private float shippingCosts;
+	@Column (name="grand_total")
 	private float grandTotal;
 
+//	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "Address", fetch = FetchType.LAZY)
+	@Transient
 	private Address deliveryAddress;
 	
+//	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "Address", fetch = FetchType.LAZY)
+	@Transient
 	private Address billingAddress;
+	
+//	@OneToOne(cascade = CascadeType.DETACH, mappedBy = "BankCard", fetch = FetchType.LAZY)
+	@Transient
 	private BankCard bankCardUsed;
 	
-	private User user;
+	@ManyToOne
+	@JoinColumn(name = "costumer_id", nullable = false)
+	private Costumer costumer;
 
-	private List<OrderLine> orderLine ;
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "Order", fetch = FetchType.LAZY)
+	@Transient
+	private List<OrderLine> orderLineList ;
 	
 	public Order() {
 		this(DEFAULT_ID, DEFAULT_ORDER_NUMBER, DEFAULT_DATE, DEFAULT_DATE, DEFAULT_FLOAT_VALUE, DEFAULT_FLOAT_VALUE,
@@ -35,12 +76,18 @@ public class Order extends ClassDao implements IConstant, Serializable {
 	}
 	
 	
+	public Order( String orderNumber,Date deliveryDate, float totalDiscount,
+			float shippingCosts, float grandTotal) {
+		
+		this(DEFAULT_ID, orderNumber,DATE_NOW, deliveryDate, totalDiscount, shippingCosts,
+				grandTotal, null, null, null, null);
 	
+	}
 
 	public Order(int id, String orderNumber, Date createDate, Date deliveryDate, float totalDiscount,
 			float shippingCosts, float grandTotal, 
 			Address deliveryAddress, Address billingAddress,
-			BankCard bankCardUsed, User user) {
+			BankCard bankCardUsed, Costumer costumer) {
 		this.setId ( id);
 		this.setOrderNumber (orderNumber);
 		this.setCreateDate (createDate);
@@ -51,8 +98,11 @@ public class Order extends ClassDao implements IConstant, Serializable {
 		this.setDeliveryAddress (deliveryAddress);
 		this.setBillingAddress ( billingAddress);
 		this.setBankCardUsed ( bankCardUsed);
-		this.setUser (user);
-		this.setOrderLine (orderLine);
+		this.setCostumer (costumer);
+
+		if (this.getOrderLineList()== null)
+			this.setOrderLineList(new ArrayList<OrderLine>());
+
 	}
 
 	
@@ -65,6 +115,22 @@ public class Order extends ClassDao implements IConstant, Serializable {
 		
 		
 	}
+	
+	public void addOrderLine(OrderLine orderLine) {
+		initOrderLineList();
+		this.getOrderLineList().add(orderLine);
+		
+	}
+
+	
+	public void initOrderLineList() {
+		if (this.getOrderLineList()== null) {
+			this.setOrderLineList(new ArrayList<OrderLine>())  ;
+		}
+		
+	}
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -145,20 +211,55 @@ public class Order extends ClassDao implements IConstant, Serializable {
 		this.bankCardUsed = bankCardUsed;
 	}
 
-	public User getUser() {
-		return user;
+
+
+
+
+	public Costumer getCostumer() {
+		return costumer;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+
+
+
+	public void setCostumer(Costumer costumer) {
+		this.costumer = costumer;
 	}
 
-	public List<OrderLine> getOrderLine() {
-		return orderLine;
+
+
+
+	public List<OrderLine> getOrderLineList() {
+		return orderLineList;
 	}
 
-	public void setOrderLine(List<OrderLine> orderLine) {
-		this.orderLine = orderLine;
+
+
+
+	public void setOrderLineList(List<OrderLine> orderLineList) {
+		this.orderLineList = orderLineList;
+	}
+
+
+	@Override
+	public String toString() {
+		String deliveryAddress = "no-delivery-address"; 
+		String billingAddress = "no-billing-address";
+		if (getDeliveryAddress() != null)
+			deliveryAddress = getDeliveryAddress().toString();
+		if (getBillingAddress() != null)
+			billingAddress = getBillingAddress().toString();
+			
+			
+		return String.format(
+				"Id[%d], %s, crea:%s, livraison le:%s, "
+				+ "réduction: -%.2f€,  frais de port(): %.2f€, Total: %.2f€ "
+				+"livraison: %s, facture: %s",
+				getId(), getOrderNumber(), 
+				Utils.date2String(getCreateDate()),
+				Utils.date2String(getDeliveryDate()), 
+				getTotalDiscount(), getShippingCosts(),	getGrandTotal(),  
+				deliveryAddress,	billingAddress); 
 	}
 	
 	

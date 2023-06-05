@@ -27,8 +27,12 @@
 		<!-- <mapping class="fr.lotus.entity.ItemCart"></mapping> -->
 		<mapping class="fr.lotus.entity.Param"></mapping>
 		<mapping class="fr.lotus.entity.BankCard"></mapping>
-		<!-- <mapping class="fr.lotus.entity.Category"></mapping> -->
-		<!-- <mapping class="fr.lotus.entity.Item"></mapping> -->
+		<mapping class="fr.lotus.entity.Category"></mapping>
+		<mapping class="fr.lotus.entity.Item"></mapping>
+		<mapping class="fr.lotus.entity.Order"></mapping>
+		<mapping class="fr.lotus.entity.Comment"></mapping>
+		<mapping class="fr.lotus.entity.CartItem"></mapping>
+		<mapping class="fr.lotus.entity.OrderLine"></mapping>
 
 	</session-factory>
 </hibernate-configuration>

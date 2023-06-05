@@ -9,7 +9,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import fr.lotus.common.IConstant;
+
 public final class Utils implements IUtils {
+	private static boolean verboseMode = true;
 
 // ------------------------------------------------------------------------------------------------
 	public static Date addDate(Date date, int nbDay) {
@@ -35,20 +37,31 @@ public final class Utils implements IUtils {
 		return null;
 	}
 
-// -----------------------------------------------------------------------
-// fonction random qui renvoie une fonction entre minValue et maxValue
-// attention dans le cas de l'utilisation pour indexer un tableau (maxIndex =
-// length)
+	// -----------------------------------------------------------------------
+	// fonction random qui renvoie une fonction entre minValue et maxValue
+	// attention dans le cas de l'utilisation pour indexer un tableau (maxIndex =
+	// length)
+	public static float randFloat(int minValue, int maxValue) {
+		// minvalue er maxValue inclus
+		return (float) (Math.random() * (maxValue + 1 - minValue) + minValue);
+	}
+
+	// -----------------------------------------------------------------------
+	// fonction random qui renvoie une fonction entre minValue et maxValue
+	// attention dans le cas de l'utilisation pour indexer un tableau (maxIndex =
+	// length)
 	public static int randInt(int minValue, int maxValue) {
 		// minvalue er maxValue inclus
 		return (int) (Math.random() * (maxValue + 1 - minValue) + minValue);
 	}
+
 	// ------------------------------------------------------------------------------------------------
 	public static String date2String(Date date) {
-		
+
 		return date2String(date, fr.lotus.common.IConstant.DATE_FORMAT);
-		
+
 	}
+
 // ------------------------------------------------------------------------------------------------
 	public static String date2String(Date date, String dateFormat) {
 
@@ -58,7 +71,7 @@ public final class Utils implements IUtils {
 
 		return returnValue;
 	}
-	
+
 // ------------------------------------------------------------------------------------------------
 // create date from a string format
 	public static Date string2Date(String dateString) {
@@ -117,13 +130,29 @@ public final class Utils implements IUtils {
 		inputString = inputString.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
 		return inputString;
 	}
+
 // ------------------------------------------------------------------------------------------------
 // display debug information with filename and line number
-	public static void trace(String msg) {
-		Throwable sys = new Throwable();
+	public static void trace(String patern, Object... arguments) {
 
-		System.out.printf("=>[%s]:%d : %s\n", sys.getStackTrace()[1].getFileName(),
-				sys.getStackTrace()[1].getLineNumber(), msg);
+		if (Utils.isVerbose()) {
 
+			Throwable sys = new Throwable();
+			String IdString = String.format("=>[%s:%d]", sys.getStackTrace()[1].getFileName(),
+					sys.getStackTrace()[1].getLineNumber());
+
+			String message = String.format(patern, arguments);
+			System.out.printf("%s%s", IdString, message);
+		}
+	}
+	// ------------------------------------------------------------------------------------------------
+
+	public static boolean isVerbose() {
+		return Utils.verboseMode;
+	}
+	// ------------------------------------------------------------------------------------------------
+
+	public static void setVerboseMode(boolean verboseMode) {
+		Utils.verboseMode = verboseMode;
 	}
 }

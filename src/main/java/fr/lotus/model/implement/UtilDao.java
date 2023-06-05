@@ -41,9 +41,8 @@ public abstract class UtilDao  {
 	
 	public void close() {
 
-//		DBConnect.close();
-//		this.setSession(null);
-//		this.setTransaction(null);
+		DBConnect.close();
+		this.setSession(null);
 
 	}
 //-------------------Getter / setter----------------------------------------------------------
