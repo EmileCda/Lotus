@@ -9,7 +9,7 @@ import fr.lotus.utils.Utils;
 public class TUserCreate {
 	public static void main(String[] args) {
 		
-		Utils.trace("*************************** Begin ************************************");
+		Utils.trace("*************************** Begin ************************************\n");
 		int maxIndex = 10;
 		User user = DataTest.genUser() ;
 		User userAdded = new User() ;
@@ -21,19 +21,19 @@ public class TUserCreate {
 				user = DataTest.genUser() ;		// generate random user
 				userAdded = (User) userDao.create(user); // create user in database
 				if (userAdded != null)
-					Utils.trace(userAdded.toString());
+					Utils.trace("%s\n",userAdded);
 				else
-					Utils.trace("userAdded is null ");
+					Utils.trace("userAdded is null\n");
 			}
 		} catch (Exception e) {
-			Utils.trace("catch create " + e.toString());
+			Utils.trace("catch create %s\n ", e.toString());
 		}finally {
 			userDao.close();
 		}
 		
 		
 		
-		Utils.trace("*************************** end ************************************");
+		Utils.trace("*************************** end ************************************\n");
 		
 	}
 }

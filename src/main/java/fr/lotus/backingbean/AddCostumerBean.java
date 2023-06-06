@@ -11,14 +11,12 @@ import fr.lotus.common.IConstant;
 import fr.lotus.entity.Costumer;
 import fr.lotus.entity.User;
 import fr.lotus.enums.Profile;
-import fr.lotus.model.implement.CostumerDao;
-import fr.lotus.model.implement.UserDao;
-import fr.lotus.model.interfaces.IObjectDao;
-import fr.lotus.model.interfaces.IUserDao;
+import fr.lotus.model.implement.CrudDao;
+import fr.lotus.model.interfaces.ICrudDao;
 import fr.lotus.utils.DataTest;
 import fr.lotus.utils.Utils;
 
-@ManagedBean(name ="addUserBean")
+@ManagedBean(name ="addCostumerBean")
 @SessionScoped
 
 //https://stackoverflow.com/questions/30128395/identifying-and-solving-javax-el-propertynotfoundexception-target-unreachable
@@ -49,7 +47,8 @@ public class AddCostumerBean implements Serializable,IConstant{
 		this.getCostumer().setProfile(Profile.COSTUMER);
 		this.getCostumer().setIsActif(true);
 		Utils.trace(this.getCostumer().toString());
-		IObjectDao costumerDao = new CostumerDao();
+		
+		ICrudDao costumerDao = new CrudDao(costumer);
 		Costumer costumerAdded = new Costumer() ;
 		
 		costumerAdded = (Costumer) costumerDao.create(this.getCostumer());

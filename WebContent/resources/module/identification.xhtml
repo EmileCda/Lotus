@@ -10,14 +10,14 @@
 	
 	<div class="row-div">
 
-		<h:inputText value="#{addUserBean.user.firstName}" required="true"
+		<h:inputText value="#{addCostumerBean.costumer.firstname}" required="true"
 			a:placeholder="#{msg['login.firstname']}"
 			requiredMessage="#{msg['login.prompt.firstname']}" id="firstname"
 			class="input-text" />
 		<h:message for="firstname" />
 	</div>
 	<div class="row-div">
-		<h:inputText value="#{addUserBean.user.lastName}" required="true"
+		<h:inputText value="#{addCostumerBean.costumer.lastname}" required="true"
 			a:placeholder="#{msg['login.lastname']}"
 			requiredMessage="#{msg['login.prompt.lastname']}" id="lastname"
 			class="input-text" />
@@ -25,7 +25,7 @@
 	</div>
 
 	<div class="row-div">
-		<h:inputText value="#{addUserBean.birthDateString}" required="true"
+		<h:inputText value="#{addCostumerBean.birthDateString}" required="true"
 			a:placeholder="#{msg['login.birthdate']}"
 			requiredMessage="#{msg['login.prompt.birthdate']}" id="birthdate"
 			class="input-text" />
@@ -33,7 +33,7 @@
 	</div>
 
 	<div class="row-div">
-		<h:inputText value="#{addUserBean.user.phone}" required="true"
+		<h:inputText value="#{addCostumerBean.costumer.phoneNumber}" required="true"
 			a:placeholder="#{msg['login.phoneNumber']}"
 			requiredMessage="#{msg['login.prompt.phoneNumber']}" id="phoneNumber"
 			class="input-text" />
@@ -43,13 +43,11 @@
 	<div class="row-div">
 		<h:commandButton id="GenUser"
 			value="#{msg['login.create.user']}" styleClass="submit-button"
-			action="#{addUserBean.generateUser}" />
+			action="#{addCostumerBean.generateUser}" />
 
 		<h:commandButton id="CreateUser"
 			value="#{msg['connection.submit']}" styleClass="submit-button"
-			action="#{addUserBean.add}" />
-
-
+			action="#{addCostumerBean.add}" />
 	</div>
 
 </ui:composition>

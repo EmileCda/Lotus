@@ -7,12 +7,8 @@ import javax.faces.bean.SessionScoped;
 
 import fr.lotus.common.IConstant;
 import fr.lotus.entity.User;
-import fr.lotus.enums.Gender;
-import fr.lotus.enums.Profile;
 import fr.lotus.model.implement.UserDao;
-import fr.lotus.model.interfaces.IUserDao;
 import fr.lotus.utils.DataTest;
-import fr.lotus.utils.Utils;
 
 @ManagedBean (name ="loginBean")
 @SessionScoped
@@ -22,31 +18,25 @@ public class LoginBean  implements IConstant{
 	
 	public LoginBean() {
 		user = new User();
-		String firstname = DataTest.firstname();
-		this.getUser().setEmail(DataTest.email(firstname,DataTest.lastname()));
-		this.getUser().setPassword(firstname);
+		initTestUser();
+	
 		
 	}
 
 	
 	public String checkUser() throws Exception {
 				
-		IUserDao userDao = new UserDao();
+		UserDao userDao = new UserDao();
 		String emailInput = this.getUser().getEmail();
-		
-//		String emailInput = this.getUser().getEmail();
-		
+
 		User userRetreive = userDao.read(emailInput);
+		this.setUser(userRetreive);
 		
-//		this.setUser(userRetreive);
-//		this.getUser().setProfile(Profile.CLIENT);
-//		this.getUser().setProfile(Profile.STORE_KEEPER);
-//		this.getUser().setProfile(Profile.MANAGER);
 
 		
 		
 		switch (this.getUser().getProfile()) {
-		case CLIENT : return  CLIENT_HOME;
+		case COSTUMER : return  CLIENT_HOME;
 		case MANAGER : return ADMIN_HOME; 
 		case STORE_KEEPER : return  STOREKEEPER_HOME;
 		default: return HOME;
@@ -62,6 +52,12 @@ public class LoginBean  implements IConstant{
 		this.user = user;
 	}
 
+
+	public void initTestUser() {
+		String firstname = DataTest.firstname();
+		this.getUser().setEmail(DataTest.email(firstname,DataTest.lastname()));
+		this.getUser().setPassword(DataTest.pass(firstname));
+	}
 	
 
 }
