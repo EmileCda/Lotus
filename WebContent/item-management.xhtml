@@ -18,10 +18,12 @@
 				<h2>#{msg['item.management.title']}</h2>
 				<h:graphicImage library="images" name="storekeeper.jpg"
 					class="homePage" />
-					<br/>
-					<h:outputText value="bonjour #{loginBean.user.firstname}" />
-					<br/>
-					<h:outputText value="#{loginBean.user.profile.name}" />
+				<br />
+				<h:outputText value="bonjour #{loginBean.user.email}" />
+				<br />
+				<h:outputText
+					value=" #{msg['item.management.you.are']} #{loginBean.user.profile.name}" />" 
+					
 
 
 			</h:form>
