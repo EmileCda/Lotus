@@ -32,11 +32,11 @@ public class LoginBean  implements IConstant{
 		User userRetreive = userDao.read(emailInput);
 		this.setUser(userRetreive);
 		
-
-		
-		
 		switch (this.getUser().getProfile()) {
-		case COSTUMER : return  CLIENT_HOME;
+		case COSTUMER : 
+		{this.setUser(userRetreive);
+			return  CLIENT_HOME;
+		}
 		case MANAGER : return ADMIN_HOME; 
 		case STORE_KEEPER : return  STOREKEEPER_HOME;
 		default: return HOME;
